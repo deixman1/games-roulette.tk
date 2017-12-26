@@ -14,3 +14,12 @@
 Route::get('/', function () {
     return view('welcome');
 });
+Route::prefix('/test')->group(function () {
+    Route::get('', 'Controller@index');
+});
+Route::get('/cli/migrate', function(){
+    Artisan::call('migrate', [
+        '--force' => true,
+    ]);
+    return 'done';
+});
