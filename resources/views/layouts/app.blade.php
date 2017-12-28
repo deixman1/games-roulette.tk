@@ -7,14 +7,67 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>{{ config('app.name', 'GameRoulette') }}</title>
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <style>
+        body{
+            width: 100%;
+            height: 100%;
+        }
+        #page{
+            display: flex;
+            width: 100%;
+            height: 100%;
+            justify-content: space-between;
+        }
+        #settings{
+            width: 200px;
+            height: 100%;
+            background: #9d9d9d;
+        }
+        #chat{
+            width: 300px;
+            height: 100%;
+            background: #9d9d9d;
+        }
+        .slide-enter, .slide-leave {
+            left: -100%;
+        }﻿
+    </style>
 </head>
 <body>
-    <div id="app">
+    <div id="page">
+        <div id="settings">
+            @guest
+                <li><a href="{{ route('login') }}">Login</a></li>
+                <li><a href="{{ route('register') }}">Register</a></li>
+            @else
+                <span>{{ Auth::user()->name }}</span>
+            @endguest
+        </div>
+        <div id="content">
+    @yield('content')
+        </div>
+        <div id="chat">
+            <div id="messages"></div>
+            <input type="text">
+        </div>
+    </div>
+    <script>
+        var head = new Vue({
+            el: '#page',
+            data:{
+                ShowSettings: false,
+                ShowChat: false
+            }
+        });
+    </script>
+</body>
+</html>
+   {{-- <div id="app">
         <nav class="navbar navbar-default navbar-static-top">
             <div class="container">
                 <div class="navbar-header">
@@ -29,7 +82,7 @@
 
                     <!-- Branding Image -->
                     <a class="navbar-brand" href="{{ url('/') }}">
-                        {{ config('app.name', 'Laravel') }}
+                        {{ config('app.name', 'GameRoulette') }}
                     </a>
                 </div>
 
@@ -72,9 +125,8 @@
         </nav>
 
         @yield('content')
-    </div>
+    </div>--}}
 
     <!-- Scripts -->
     {{--<script src="{{ asset('js/app.js') }}"></script>--}}
-</body>
-</html>
+
