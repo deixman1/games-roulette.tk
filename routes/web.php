@@ -14,12 +14,7 @@
 Route::get('/', function () {
     return view('welcome');
 });
-Route::prefix('/test')->group(function () {
-    Route::get('', 'Controller@index');
-});
-Route::get('/cli/migrate', function(){
-    Artisan::call('migrate', [
-        '--force' => true,
-    ]);
-    return 'done';
+Route::auth();//Регистрация
+Route::get('/home',function (){
+    return view('home');
 });
