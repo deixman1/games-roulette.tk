@@ -13,24 +13,16 @@
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/vue"></script>
     <style>
-        body{
-            width: 100%;
-            height: 100%;
-        }
         #page{
             display: flex;
-            width: 100%;
-            height: 100%;
             justify-content: space-between;
         }
         #settings{
             width: 200px;
-            height: 100%;
             background: #9d9d9d;
         }
         #chat{
             width: 300px;
-            height: 100%;
             background: #9d9d9d;
         }
         .slide-enter, .slide-leave {
@@ -45,25 +37,48 @@
                 <li><a href="{{ route('login') }}">Login</a></li>
                 <li><a href="{{ route('register') }}">Register</a></li>
             @else
-                <span>{{ Auth::user()->name }}</span>
+                <li>{{ Auth::user()->name }}</li>
+                <li><a href="{{ route('logout') }}">Logout</a></li>
             @endguest
+                <li id="games-list">
+
+                </li>
         </div>
         <div id="content">
-    @yield('content')
+        @yield('content')
         </div>
         <div id="chat">
-            <div id="messages"></div>
-            <input type="text">
+            <div v-for="message in messages">@{{ message }}</div>
+            <input type="text" v-on:keyup.enter="send($event.target.value)">
         </div>
     </div>
     <script>
-        var head = new Vue({
-            el: '#page',
-            data:{
-                ShowSettings: false,
-                ShowChat: false
-            }
-        });
+        window.onload = function (ev) {
+            var socket = new WebSocket('ws://localhost:8080');
+            socket.onopen = function(e) {
+                console.log("Connection established!");
+            };
+            socket.onmessage = function(e) {
+                console.log(e);
+                vue.messages.push(e.data);
+            };
+            var vue = new Vue({
+                el: '#page',
+                data:{
+                    ShowSettings: false,
+                    ShowChat: false,
+                    messages: [
+
+                    ]
+                },
+                methods:{
+                    send:function(message){
+                        //console.log(conn.send(message));
+                        socket.send(message);
+                    }
+                }
+            });
+        }
     </script>
 </body>
 </html>

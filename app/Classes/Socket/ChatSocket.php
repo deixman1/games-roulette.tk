@@ -25,11 +25,10 @@ class ChatSocket extends BaseSocket{
             , $from->resourceId, $msg, $numRecv, $numRecv == 1 ? '' : 's');
 
         foreach ($this->clients as $client) {
-            if ($from !== $client) {
                 // The sender is not the receiver, send to each client connected
                 $client->send($msg);
-            }
         }
+        return $msg;
     }
 
     public function onClose(ConnectionInterface $conn) {

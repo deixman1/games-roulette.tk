@@ -15,4 +15,7 @@ Route::get('/', function () {
     return view('index');
 });
 Route::auth();//Регистрация
-
+Route::get('/logout', function () {
+    Auth::logout();
+    return back();
+})->name('logout');
